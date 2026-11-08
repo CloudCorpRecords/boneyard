@@ -152,4 +152,6 @@ async function handler(req, res) {
   }
 }
 
-module.exports = { handler, analyseManifest };
+module.exports = handler;
+module.exports.handler = handler;
+module.exports.analyseManifest = analyseManifest;
