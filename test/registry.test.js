@@ -186,9 +186,12 @@ describe('RegistryError shape', () => {
 // These tests confirm the default timeout value and override behaviour without
 // making live network calls. We point the registry env vars at a guaranteed-
 // unreachable address (0.0.0.0) and rely on a very short explicit timeout so
-// tests complete in milliseconds. The key invariant is that:
+// tests complete in milliseconds. The key invariants are:
 //   1. When no opts are passed, the default timeout is 30 000 ms (not 10 000).
 //   2. A caller-supplied opts.timeout overrides the default.
+//   3. The timeout is implemented as a Promise.race — no AbortSignal is passed
+//      to fetch, so the implementation is safe behind env-configured proxies
+//      (NODE_USE_ENV_PROXY) that abort when an AbortSignal is attached.
 //
 // To verify (1) without waiting 30 s, we read the module source directly and
 // assert the literal appears correctly — this is the zero-network, fixture-style
@@ -201,7 +204,7 @@ describe('fetchNpm / fetchPypi default timeout', () => {
       path.join(__dirname, '../lib/registry.js'),
       'utf8'
     );
-    // Assert the new default is present in fetchNpm
+    // Assert the default 30000 ms literal is present in the source
     assert.ok(
       src.includes(': 30000'),
       'fetchNpm should fall back to 30000 ms when no opts.timeout is supplied'
@@ -216,6 +219,29 @@ describe('fetchNpm / fetchPypi default timeout', () => {
     assert.ok(
       !src.includes(': 10000'),
       'old 10000 ms default must have been removed from registry.js'
+    );
+  });
+
+  it('lib/registry.js does NOT pass AbortSignal to fetch (proxy-safe implementation)', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '../lib/registry.js'),
+      'utf8'
+    );
+    // AbortController must not appear anywhere — it was the implementation we removed
+    assert.ok(
+      !src.includes('AbortController'),
+      'registry.js must not use AbortController — timeout is implemented via Promise.race'
+    );
+    // AbortSignal must not appear in non-comment code lines.
+    // Comments explaining the absence of AbortSignal are fine and expected.
+    const codeLines = src.split('\n').filter(line => {
+      const trimmed = line.trimStart();
+      return trimmed.length > 0 && !trimmed.startsWith('*') && !trimmed.startsWith('//');
+    });
+    const codeHasAbortSignal = codeLines.some(line => line.includes('AbortSignal'));
+    assert.ok(
+      !codeHasAbortSignal,
+      'no non-comment code line in registry.js should reference AbortSignal'
     );
   });
 
