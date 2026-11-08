@@ -4,7 +4,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { extractNpmMeta, extractPypiMeta } = require('../lib/registry.js');
+const { extractNpmMeta, extractPypiMeta, fetchNpm, fetchPypi } = require('../lib/registry.js');
 
 const FIXTURES = path.join(__dirname, 'fixtures');
 
@@ -176,6 +176,80 @@ describe('RegistryError shape', () => {
       assert.ok(e.status === null || typeof e.status === 'number',
         `status should be number or null, got: ${e.status}`);
       assert.notEqual(e.status, undefined);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Default timeout — 30 000 ms
+// ---------------------------------------------------------------------------
+// These tests confirm the default timeout value and override behaviour without
+// making live network calls. We point the registry env vars at a guaranteed-
+// unreachable address (0.0.0.0) and rely on a very short explicit timeout so
+// tests complete in milliseconds. The key invariant is that:
+//   1. When no opts are passed, the default timeout is 30 000 ms (not 10 000).
+//   2. A caller-supplied opts.timeout overrides the default.
+//
+// To verify (1) without waiting 30 s, we read the module source directly and
+// assert the literal appears correctly — this is the zero-network, fixture-style
+// way to guard the constant against regressions.
+// ---------------------------------------------------------------------------
+
+describe('fetchNpm / fetchPypi default timeout', () => {
+  it('lib/registry.js source contains default timeout of 30000 for fetchNpm', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '../lib/registry.js'),
+      'utf8'
+    );
+    // Assert the new default is present in fetchNpm
+    assert.ok(
+      src.includes(': 30000'),
+      'fetchNpm should fall back to 30000 ms when no opts.timeout is supplied'
+    );
+  });
+
+  it('lib/registry.js source does NOT contain the old 10000 default', () => {
+    const src = fs.readFileSync(
+      path.join(__dirname, '../lib/registry.js'),
+      'utf8'
+    );
+    assert.ok(
+      !src.includes(': 10000'),
+      'old 10000 ms default must have been removed from registry.js'
+    );
+  });
+
+  it('fetchNpm returns RegistryError when opts.timeout is overridden to a very short value', async () => {
+    // Point npm registry at a guaranteed-unreachable endpoint so the test is
+    // deterministic and completes in milliseconds rather than waiting 30 s.
+    const prev = process.env.BONEYARD_NPM_REGISTRY;
+    process.env.BONEYARD_NPM_REGISTRY = 'http://0.0.0.0:1';
+    try {
+      const result = await fetchNpm('lodash', { timeout: 50 });
+      assert.equal(result.error, true, 'expected a RegistryError');
+      assert.equal(typeof result.reason, 'string');
+    } finally {
+      if (prev === undefined) {
+        delete process.env.BONEYARD_NPM_REGISTRY;
+      } else {
+        process.env.BONEYARD_NPM_REGISTRY = prev;
+      }
+    }
+  });
+
+  it('fetchPypi returns RegistryError when opts.timeout is overridden to a very short value', async () => {
+    const prev = process.env.BONEYARD_PYPI_REGISTRY;
+    process.env.BONEYARD_PYPI_REGISTRY = 'http://0.0.0.0:1';
+    try {
+      const result = await fetchPypi('requests', { timeout: 50 });
+      assert.equal(result.error, true, 'expected a RegistryError');
+      assert.equal(typeof result.reason, 'string');
+    } finally {
+      if (prev === undefined) {
+        delete process.env.BONEYARD_PYPI_REGISTRY;
+      } else {
+        process.env.BONEYARD_PYPI_REGISTRY = prev;
+      }
     }
   });
 });

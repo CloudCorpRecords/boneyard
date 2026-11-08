@@ -6,7 +6,7 @@ Tasks are ordered by dependency. Each task references the requirements it satisf
 
 ## Phase 1 — Project Scaffolding
 
-### Task 1 — Initialise repository structure
+### Task 1 — Initialise repository structure [x]
 
 **Requirements:** (all)
 
@@ -25,7 +25,7 @@ Tasks are ordered by dependency. Each task references the requirements it satisf
 
 ## Phase 2 — Parsers + Tests
 
-### Task 2 — Implement `lib/parse.js`
+### Task 2 — Implement `lib/parse.js` [x]
 
 **Requirements:** REQ-01, REQ-02
 
@@ -45,7 +45,7 @@ Tasks are ordered by dependency. Each task references the requirements it satisf
 
 **Done when:** all tests in Task 3 pass.
 
-### Task 3 — Write tests for `lib/parse.js`
+### Task 3 — Write tests for `lib/parse.js` [x]
 
 **Requirements:** REQ-01, REQ-02
 
@@ -79,7 +79,7 @@ Property-based test (using `gen.js` stubs — implement the generator minimally 
 
 ## Phase 3 — Registry Clients + Fixture Tests
 
-### Task 4 — Record registry fixtures
+### Task 4 — Record registry fixtures [x]
 
 **Requirements:** REQ-03, REQ-04
 
@@ -92,7 +92,7 @@ Run the script once, commit the fixture files. The script is not run as part of 
 
 **Done when:** All 8 fixture files exist and are valid JSON.
 
-### Task 5 — Implement `lib/registry.js`
+### Task 5 — Implement `lib/registry.js` [x]
 
 **Requirements:** REQ-03, REQ-04
 
@@ -106,7 +106,7 @@ Run the script once, commit the fixture files. The script is not run as part of 
 
 **Done when:** all tests in Task 6 pass.
 
-### Task 6 — Write tests for `lib/registry.js`
+### Task 6 — Write tests for `lib/registry.js` [x]
 
 **Requirements:** REQ-03, REQ-04
 
@@ -130,7 +130,7 @@ No live network calls in any test.
 
 ## Phase 4 — Analyzer + Scorer + Tests
 
-### Task 7 — Implement `lib/analyze.js`
+### Task 7 — Implement `lib/analyze.js` [x]
 
 **Requirements:** REQ-05
 
@@ -142,7 +142,7 @@ No live network calls in any test.
 
 **Done when:** all tests in Task 8 pass.
 
-### Task 8 — Write tests for `lib/analyze.js`
+### Task 8 — Write tests for `lib/analyze.js` [x]
 
 **Requirements:** REQ-05
 
@@ -164,7 +164,7 @@ Property-based test: for any generated `PackageFinding`, `evidence.length > 0`.
 
 **Done when:** `node --test test/analyze.test.js` exits 0.
 
-### Task 9 — Implement `lib/score.js`
+### Task 9 — Implement `lib/score.js` [x]
 
 **Requirements:** REQ-06
 
@@ -174,7 +174,7 @@ Property-based test: for any generated `PackageFinding`, `evidence.length > 0`.
 
 **Done when:** all tests in Task 10 pass.
 
-### Task 10 — Write tests for `lib/score.js`
+### Task 10 — Write tests for `lib/score.js` [x]
 
 **Requirements:** REQ-06
 
@@ -202,7 +202,7 @@ Property-based tests:
 
 ## Phase 5 — Suggestions + Report + Tests
 
-### Task 11 — Implement `lib/suggest.js`
+### Task 11 — Implement `lib/suggest.js` [x]
 
 **Requirements:** REQ-07
 
@@ -214,7 +214,7 @@ Property-based tests:
 
 **Done when:** all tests in Task 12 pass.
 
-### Task 12 — Write tests for `lib/suggest.js`
+### Task 12 — Write tests for `lib/suggest.js` [x]
 
 **Requirements:** REQ-07
 
@@ -230,7 +230,7 @@ Create `test/suggest.test.js`.
 
 **Done when:** `node --test test/suggest.test.js` exits 0.
 
-### Task 13 — Implement `lib/report.js`
+### Task 13 — Implement `lib/report.js` [x]
 
 **Requirements:** REQ-08, REQ-09, REQ-13
 
@@ -249,7 +249,7 @@ Create `test/suggest.test.js`.
 
 **Done when:** all tests in Task 14 pass.
 
-### Task 14 — Write tests for `lib/report.js`
+### Task 14 — Write tests for `lib/report.js` [x]
 
 **Requirements:** REQ-08, REQ-09, REQ-13
 
@@ -271,7 +271,7 @@ Create `test/report.test.js`.
 
 ## Phase 6 — CLI
 
-### Task 15 — Implement `bin/boneyard.js`
+### Task 15 — Implement `bin/boneyard.js` [x]
 
 **Requirements:** REQ-01, REQ-02, REQ-03, REQ-04, REQ-05, REQ-06, REQ-07, REQ-08, REQ-09, REQ-10
 
@@ -291,7 +291,7 @@ Create `test/report.test.js`.
 
 ## Phase 7 — Web Layer
 
-### Task 16 — Implement `api/analyze.js`
+### Task 16 — Implement `api/analyze.js` [x]
 
 **Requirements:** REQ-11, REQ-12
 
@@ -305,7 +305,7 @@ Create `test/report.test.js`.
 
 **Done when:** manually testable via `curl` against `server.js`.
 
-### Task 17 — Implement `server.js`
+### Task 17 — Implement `server.js` [x]
 
 **Requirements:** REQ-11, REQ-12
 
@@ -318,7 +318,7 @@ Create `test/report.test.js`.
 
 **Done when:** `node server.js` starts, serves `public/index.html` at `/`, and `curl -X POST /api/analyze` with a valid body returns a JSON report.
 
-### Task 18 — Implement the web UI (`public/`)
+### Task 18 — Implement the web UI (`public/`) [x]
 
 **Requirements:** REQ-11
 
@@ -338,7 +338,7 @@ Create `test/report.test.js`.
 
 ## Phase 8 — README and Final Verification
 
-### Task 19 — Write `README.md`
+### Task 19 — Write `README.md` [x]
 
 - Title and one-paragraph description.
 - Skeleton Crew / Kiroween 2026 badge / note.
@@ -351,7 +351,7 @@ Create `test/report.test.js`.
 - Health score formula (one paragraph).
 - Contributing: how to add a replacement mapping, how to record fixtures.
 
-### Task 20 — Final verification
+### Task 20 — Final verification [x]
 
 - Run `node --test` → all tests pass, exit 0.
 - Run `node bin/boneyard.js package.json` against the project's own `package.json` → report printed, exit 0 (no deprecated deps).

@@ -1,3 +1,83 @@
 <!DOCTYPE html>
-<!-- public/index.html — Single-page web UI stub -->
-<html lang="en"><head><meta charset="UTF-8"><title>Boneyard</title></head><body></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boneyard — Dependency Coroner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="logo">🦴 Boneyard</h1>
+      <p class="tagline">Dependency coroner for JS &amp; Python projects</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="input-section" aria-label="Manifest input">
+      <div class="form-row">
+        <label for="format" class="field-label">Ecosystem</label>
+        <div class="toggle-group" role="group" aria-label="Choose ecosystem">
+          <button
+            type="button"
+            id="toggle-npm"
+            class="toggle-btn active"
+            data-ecosystem="npm"
+            aria-pressed="true"
+          >package.json (npm)</button>
+          <button
+            type="button"
+            id="toggle-pip"
+            class="toggle-btn"
+            data-ecosystem="pip"
+            aria-pressed="false"
+          >requirements.txt (pip)</button>
+        </div>
+        <input type="hidden" id="format" value="npm" />
+      </div>
+
+      <div class="form-row">
+        <label for="manifest" class="field-label">Manifest</label>
+        <div class="sample-btns">
+          <button type="button" class="sample-btn" id="sample-npm">Load npm sample</button>
+          <button type="button" class="sample-btn" id="sample-pip">Load pip sample</button>
+        </div>
+        <textarea
+          id="manifest"
+          class="manifest-input"
+          rows="14"
+          placeholder="Paste your package.json or requirements.txt here…"
+          aria-label="Manifest contents"
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <div class="form-row form-actions">
+        <button type="button" id="analyse-btn" class="primary-btn">
+          Analyse
+        </button>
+        <span id="loading-indicator" class="loading" aria-live="polite" hidden>Fetching registry data…</span>
+      </div>
+    </section>
+
+    <section
+      id="results"
+      class="results-section"
+      aria-live="polite"
+      aria-label="Analysis results"
+      hidden
+    ></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Built with <a href="https://kiro.dev" target="_blank" rel="noopener noreferrer">Kiro</a>
+      &mdash; Kiroween 2026, Skeleton Crew category.
+      Zero dependencies.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
